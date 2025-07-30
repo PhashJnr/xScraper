@@ -14,7 +14,7 @@ def cleanup_old_profiles():
     """Remove all old profile directories"""
     print("🧹 Cleaning up old profile directories...")
     
-    # Remove any profile directories that start with chrome_profile_
+    # Remove any profile directories that start with chrome_profile_ in current dir
     current_dir = os.getcwd()
     for item in os.listdir(current_dir):
         if item.startswith('chrome_profile_'):
@@ -25,6 +25,20 @@ def cleanup_old_profiles():
                     print(f"✅ Removed: {item}")
                 except Exception as e:
                     print(f"❌ Failed to remove {item}: {e}")
+    
+    # Also clean up /tmp profiles
+    try:
+        import glob
+        tmp_profiles = glob.glob("/tmp/chrome_profile_*")
+        for profile in tmp_profiles:
+            try:
+                if os.path.isdir(profile):
+                    shutil.rmtree(profile)
+                    print(f"✅ Removed /tmp profile: {profile}")
+            except Exception as e:
+                print(f"❌ Failed to remove /tmp profile {profile}: {e}")
+    except Exception as e:
+        print(f"⚠️ Error cleaning /tmp profiles: {e}")
 
 def kill_chrome_processes():
     """Kill any existing Chrome processes"""
@@ -57,13 +71,16 @@ def create_profile(profile_name, profile_type):
     print(f"📁 Creating {profile_type} profile: {profile_name}")
     
     try:
+        # Create profile in /tmp directory
+        profile_path = f"/tmp/{profile_name}"
+        
         # Ensure the directory exists
-        os.makedirs(profile_name, exist_ok=True)
+        os.makedirs(profile_path, exist_ok=True)
         
         # Setup Chrome options
         options = Options()
         options.binary_location = CHROME_BINARY_PATH
-        options.add_argument(f'--user-data-dir={profile_name}')
+        options.add_argument(f'--user-data-dir={profile_path}')
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
@@ -77,7 +94,7 @@ def create_profile(profile_name, profile_type):
         # Test the profile
         driver = webdriver.Chrome(options=options)
         driver.get('https://www.google.com')
-        print(f"✅ {profile_type} profile created successfully: {profile_name}")
+        print(f"✅ {profile_type} profile created successfully: {profile_path}")
         driver.quit()
         return True
         

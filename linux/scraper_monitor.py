@@ -79,8 +79,8 @@ class TwitterScraperMonitor:
         try:
             import uuid
             
-            # Create unique profile directory for this instance
-            unique_profile = f"chrome_profile_user_{uuid.uuid4().hex[:8]}"
+            # Create unique profile directory in /tmp for this instance
+            unique_profile = f"/tmp/chrome_profile_user_{uuid.uuid4().hex[:8]}"
             profile_dir = unique_profile
             
             # Ensure the directory exists
@@ -581,39 +581,37 @@ class TwitterScraperMonitor:
         return "Unknown time"
     
     def cleanup(self):
-        """Cleanup resources"""
+        """Clean up resources"""
         try:
             if self.driver:
-                logger.info("Closing Chrome driver...")
                 self.driver.quit()
                 self.driver = None
-                
-            # Clean up old profile directories (keep only the latest 3)
-            self._cleanup_old_profiles()
-                
+                logger.info("Chrome driver quit successfully")
+            
+            # Clean up any profile directories in /tmp
+            self._cleanup_tmp_profiles()
+            
         except Exception as e:
             logger.error(f"Error during cleanup: {e}")
-            self._force_kill_chrome()
     
-    def _cleanup_old_profiles(self):
-        """Clean up old Chrome profile directories - now just ensures main profile is clean"""
+    def _cleanup_tmp_profiles(self):
+        """Clean up Chrome profile directories in /tmp"""
         try:
-            # Only clean up if there are any unique profile directories from previous runs
             import glob
-            profile_pattern = os.path.join(self.project_dir, 'chrome_profile_*')
-            profile_dirs = glob.glob(profile_pattern)
+            import shutil
             
-            # Remove any leftover unique profile directories
-            for old_profile in profile_dirs:
+            # Find and remove Chrome profile directories in /tmp
+            tmp_profiles = glob.glob("/tmp/chrome_profile_*")
+            for profile in tmp_profiles:
                 try:
-                    import shutil
-                    shutil.rmtree(old_profile)
-                    logger.info(f"Cleaned up old unique profile: {old_profile}")
+                    if os.path.isdir(profile):
+                        shutil.rmtree(profile)
+                        logger.info(f"Cleaned up profile: {profile}")
                 except Exception as e:
-                    logger.warning(f"Could not clean up profile {old_profile}: {e}")
+                    logger.warning(f"Failed to clean up profile {profile}: {e}")
                     
         except Exception as e:
-            logger.warning(f"Error cleaning up old profiles: {e}")
+            logger.warning(f"Error cleaning up /tmp profiles: {e}")
     
     def _force_kill_chrome(self):
         """Force kill Chrome processes if normal cleanup fails"""
