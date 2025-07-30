@@ -61,32 +61,45 @@ class YapSearchScraper:
         self.output_file = 'yap_links.txt'
         
     def _kill_existing_chrome(self):
-        """Kill any Chrome processes that might interfere"""
+        """Kill ALL Chrome processes to ensure clean environment"""
         try:
-            # Since we're using unique profiles, we can be less aggressive
-            # Just kill any Chrome processes that might be hanging
-            chrome_processes = []
-            for proc in psutil.process_iter(['pid', 'name']):
+            logger.info("🔪 Killing ALL Chrome processes for clean environment...")
+            
+            killed_count = 0
+            
+            # Kill all Chrome and ChromeDriver processes
+            for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
                 try:
                     proc_name = proc.info['name']
-                    if proc_name and 'chrome' in proc_name.lower():
-                        chrome_processes.append(proc)
-                except (psutil.NoSuchProcess, psutil.AccessDenied):
-                    continue
-            
-            if chrome_processes:
-                logger.info(f"Found {len(chrome_processes)} Chrome processes, killing them...")
-                for proc in chrome_processes:
-                    try:
-                        logger.info(f"Killing Chrome process: {proc.pid}")
+                    if proc_name and ('chrome' in proc_name.lower() or 'chromedriver' in proc_name.lower()):
+                        logger.info(f"Killing Chrome process: {proc.pid} ({proc_name})")
                         proc.terminate()
                         proc.wait(timeout=3)
-                    except psutil.TimeoutExpired:
+                        killed_count += 1
+                except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.TimeoutExpired):
+                    try:
+                        # Force kill if terminate fails
                         proc.kill()
+                        killed_count += 1
                     except (psutil.NoSuchProcess, psutil.AccessDenied):
                         pass
-            else:
-                logger.info("No Chrome processes found")
+                except Exception as e:
+                    logger.warning(f"Error killing process {proc.pid}: {e}")
+            
+            # Also use system commands for extra cleanup
+            try:
+                import subprocess
+                # Kill Chrome processes using system commands
+                subprocess.run(['pkill', '-f', 'chrome'], capture_output=True, timeout=5)
+                subprocess.run(['pkill', '-f', 'chromedriver'], capture_output=True, timeout=5)
+                subprocess.run(['pkill', '-f', 'google-chrome'], capture_output=True, timeout=5)
+            except Exception as e:
+                logger.warning(f"Error using system commands to kill Chrome: {e}")
+            
+            # Wait for processes to fully terminate
+            time.sleep(3)
+            
+            logger.info(f"✅ Killed {killed_count} Chrome processes")
                     
         except Exception as e:
             logger.warning(f"Error killing existing Chrome processes: {e}")

@@ -101,14 +101,33 @@ class YapScraperService:
 
 def main():
     """Main function"""
-    logger.info("Starting YAP Links Scraper Service")
+    print("🚀 Starting YAP Links Scraper")
+    print("=" * 40)
+    
+    # Kill any existing Chrome processes before starting
+    try:
+        from kill_chrome import kill_all_chrome_processes
+        print("🧹 Cleaning up any existing Chrome processes...")
+        kill_all_chrome_processes()
+        print("✅ Chrome cleanup completed")
+    except Exception as e:
+        print(f"⚠️ Chrome cleanup warning: {e}")
+    
+    print("\n📡 Initializing YAP scraper...")
+    
+    # Create and run the YAP scraper service
+    yap_service = YapScraperService()
     
     try:
-        service = YapScraperService()
-        service.run_continuous()
+        yap_service.run_continuous()
+    except KeyboardInterrupt:
+        print("\n🛑 Stopping YAP scraper...")
+        if yap_service.yap_scraper:
+            yap_service.yap_scraper.cleanup()
     except Exception as e:
-        logger.error(f"Fatal error: {e}")
-        sys.exit(1)
+        print(f"\n❌ Error running YAP scraper: {e}")
+        if yap_service.yap_scraper:
+            yap_service.yap_scraper.cleanup()
 
 if __name__ == "__main__":
     main() 

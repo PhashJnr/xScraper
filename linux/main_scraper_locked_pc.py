@@ -161,9 +161,32 @@ class LockedPCMonitorService:
             self.twitter_monitor.cleanup()
 
 def main():
-    """Main entry point for locked PC mode"""
-    service = LockedPCMonitorService()
-    service.run_continuous_locked_pc()
+    """Main function"""
+    print("🚀 Starting Twitter Monitor (Locked PC Mode)")
+    print("=" * 50)
+    
+    # Kill any existing Chrome processes before starting
+    try:
+        from kill_chrome import kill_all_chrome_processes
+        print("🧹 Cleaning up any existing Chrome processes...")
+        kill_all_chrome_processes()
+        print("✅ Chrome cleanup completed")
+    except Exception as e:
+        print(f"⚠️ Chrome cleanup warning: {e}")
+    
+    print("\n📡 Initializing monitor...")
+    
+    # Create and run the monitor service
+    monitor_service = LockedPCMonitorService()
+    
+    try:
+        monitor_service.run_continuous_locked_pc()
+    except KeyboardInterrupt:
+        print("\n🛑 Stopping monitor...")
+        monitor_service.cleanup()
+    except Exception as e:
+        print(f"\n❌ Error running monitor: {e}")
+        monitor_service.cleanup()
 
 if __name__ == "__main__":
     main() 
