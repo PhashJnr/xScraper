@@ -1,0 +1,26 @@
+# Telegram Configuration
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+TELEGRAM_CHAT_ID=your_chat_id_here
+
+# Twitter Login Credentials
+TWITTER_USERNAME=your_twitter_username
+TWITTER_PASSWORD=your_twitter_password
+
+# Monitoring Settings
+CHECK_INTERVAL_MINUTES=15
+YAP_CHECK_INTERVAL_MINUTES=1080
+MAX_TWEETS_TO_SCRAPE=50
+
+# Users to Monitor (comma-separated)
+USERS_TO_MONITOR=username1,username2,username3
+
+# YAP Search Configuration
+YAP_SEARCH_KEYWORDS=("cysic" OR @cysic_xyz)
+YAP_FILTER_VERIFIED=true
+YAP_MIN_REPLIES=20
+YAP_LANGUAGE=en
+YAP_TIME_WINDOW=1440
+
+# Logging
+LOG_LEVEL=INFO
+LOG_FILE=tweet_monitor.log 

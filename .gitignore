@@ -14,6 +14,12 @@ chrome_profile_*/
 *.crdownload
 *.tmp
 
+# Chrome profiles in subdirectories (Windows and Linux)
+windows/chrome_profile_user/
+windows/chrome_profile_yap/
+linux/chrome_profile_user/
+linux/chrome_profile_yap/
+
 # Telegram credentials
 telegram_config.json
 bot_credentials.json
@@ -28,6 +34,7 @@ logs/
 monitor.log
 debug.log
 error.log
+tweet_monitor.log
 
 # Data files (contains tweet IDs, user data)
 seen_tweets.json
@@ -42,6 +49,7 @@ users_tweetlinks.txt
 !requirements.txt
 !env_example.txt
 !README.md
+!README_*.md
 !CLOUD_DEPLOYMENT.md
 !MULTI_SERVICE_DEPLOYMENT.md
 
@@ -249,4 +257,13 @@ debug.log
 
 # System monitoring
 system_metrics.json
-performance_logs/ 
+performance_logs/
+
+# ===========================================
+# PROJECT SPECIFIC
+# ===========================================
+
+# Temporary and utility files
+check_config.py
+RESTORATION_SUMMARY.md
+STRUCTURE_SUMMARY.md 
