@@ -4,77 +4,66 @@ Configuration settings for Twitter Monitor
 """
 
 import os
+import logging
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
-# Base directory for the project
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Twitter credentials
+TWITTER_USERNAME = os.getenv('TWITTER_USERNAME')
+TWITTER_PASSWORD = os.getenv('TWITTER_PASSWORD')
 
-# Twitter API Configuration (for reference, not used in scraping mode)
-TWITTER_BEARER_TOKEN = os.getenv('TWITTER_BEARER_TOKEN', '')
+# Telegram credentials
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
-# Twitter Login Credentials (for cloud VPS)
-TWITTER_USERNAME = os.getenv('TWITTER_USERNAME', '')
-TWITTER_PASSWORD = os.getenv('TWITTER_PASSWORD', '')
+# Check intervals (in minutes)
+CHECK_INTERVAL_MINUTES = int(os.getenv('CHECK_INTERVAL_MINUTES', 5))
+YAP_CHECK_INTERVAL_MINUTES = int(os.getenv('YAP_CHECK_INTERVAL_MINUTES', 3))
 
-# Telegram Configuration
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '')
-TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', '')
+# Chrome profiles - Use proper names
+CHROME_PROFILE_USER = 'chrome_profile_user'
+CHROME_PROFILE_YAP = 'chrome_profile_yap'
 
-# Monitoring intervals (in minutes)
-CHECK_INTERVAL_MINUTES = int(os.getenv('CHECK_INTERVAL_MINUTES', '15'))  # User monitoring interval
-YAP_CHECK_INTERVAL_MINUTES = int(os.getenv('YAP_CHECK_INTERVAL_MINUTES', '1080'))  # YAP links interval (18 hours = 1080 minutes)
+# Chrome binary path
+CHROME_BINARY_PATH = '/usr/bin/google-chrome'
 
-# Maximum tweets to scrape
-MAX_TWEETS_TO_SCRAPE = int(os.getenv('MAX_TWEETS_TO_SCRAPE', '50'))
+# Scraping configuration
+MAX_TWEETS_TO_SCRAPE = int(os.getenv('MAX_TWEETS_TO_SCRAPE', 10))
 
 # Users to monitor (comma-separated list)
-USERS_TO_MONITOR = [
-    user.strip() for user in os.getenv('USERS_TO_MONITOR', 'phashcooks,JoeParys,curtislepore,cryptojack,greg_miller05,CryptoWendyO,MasonVersluis,Sheldon_Sniper,blockchainchick,cryptorecruitr,EleanorTerrett,SadafJadran,LadyofCrypto1,MacnBTC,CryptoWizardd,eliz883,ariusCrypt0,KoroushAK').split(',')
-    if user.strip()
-]
+USERS_TO_MONITOR = os.getenv('USERS_TO_MONITOR', 'elonmusk,OpenAI,AnthropicAI').split(',')
 
-# Logging Configuration
+# YAP Search Configuration
+YAP_SEARCH_KEYWORDS = os.getenv('YAP_SEARCH_KEYWORDS', 'AI,artificial intelligence,machine learning').split(',')
+YAP_FILTER_VERIFIED = os.getenv('YAP_FILTER_VERIFIED', 'true').lower() == 'true'
+YAP_FILTER_NATIVE_RETWEETS = os.getenv('YAP_FILTER_NATIVE_RETWEETS', 'false').lower() == 'true'
+YAP_FILTER_RETWEETS = os.getenv('YAP_FILTER_RETWEETS', 'false').lower() == 'true'
+YAP_FILTER_REPLIES = os.getenv('YAP_FILTER_REPLIES', 'false').lower() == 'true'
+YAP_MIN_REPLIES = int(os.getenv('YAP_MIN_REPLIES', 0))
+YAP_MIN_LIKES = int(os.getenv('YAP_MIN_LIKES', 0))
+YAP_MIN_RETWEETS = int(os.getenv('YAP_MIN_RETWEETS', 0))
+YAP_LANGUAGE = os.getenv('YAP_LANGUAGE', 'en')
+YAP_TIME_WINDOW = os.getenv('YAP_TIME_WINDOW', '7d')  # 7d, 1d, 1h, etc.
+YAP_FILTER_LINKS = os.getenv('YAP_FILTER_LINKS', 'false').lower() == 'true'
+YAP_FILTER_MEDIA = os.getenv('YAP_FILTER_MEDIA', 'false').lower() == 'true'
+YAP_FILTER_IMAGES = os.getenv('YAP_FILTER_IMAGES', 'false').lower() == 'true'
+YAP_FILTER_VIDEOS = os.getenv('YAP_FILTER_VIDEOS', 'false').lower() == 'true'
+YAP_SEARCH_SOURCE = os.getenv('YAP_SEARCH_SOURCE', 'twitter')  # twitter, news, etc.
+
+# Logging configuration
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
-LOG_FILE = os.getenv('LOG_FILE', 'tweet_monitor.log')
+LOG_FILE = 'tweet_monitor.log'
 
-# YAP Search Query Configuration
-# These parameters control the YAP search query for finding relevant tweets
-
-# Individual Chrome profiles
-CHROME_PROFILE_USER = os.path.join(BASE_DIR, "chrome_profile_user")
-CHROME_PROFILE_YAP = os.path.join(BASE_DIR, "chrome_profile_yap")
-
-# Search Keywords (REQUIRED)
-YAP_SEARCH_KEYWORDS = os.getenv('YAP_SEARCH_KEYWORDS', '("cysic" OR @cysic_xyz)')
-
-# Account Verification Filter
-YAP_FILTER_VERIFIED = os.getenv('YAP_FILTER_VERIFIED', 'true').lower() == 'true'  # Only verified accounts
-
-# Content Type Filters
-YAP_FILTER_NATIVE_RETWEETS = os.getenv('YAP_FILTER_NATIVE_RETWEETS', 'true').lower() == 'true'  # Exclude native retweets
-YAP_FILTER_RETWEETS = os.getenv('YAP_FILTER_RETWEETS', 'true').lower() == 'true'  # Exclude retweets
-YAP_FILTER_REPLIES = os.getenv('YAP_FILTER_REPLIES', 'true').lower() == 'true'  # Exclude replies
-
-# Engagement Filters
-YAP_MIN_REPLIES = int(os.getenv('YAP_MIN_REPLIES', '20'))  # Minimum replies required
-YAP_MIN_LIKES = int(os.getenv('YAP_MIN_LIKES', '0'))  # Minimum likes required
-YAP_MIN_RETWEETS = int(os.getenv('YAP_MIN_RETWEETS', '0'))  # Minimum retweets required
-
-# Language and Time Filters
-YAP_LANGUAGE = os.getenv('YAP_LANGUAGE', 'en')  # Language filter (en, es, fr, etc.)
-YAP_TIME_WINDOW = int(os.getenv('YAP_TIME_WINDOW', '1440'))  # Time window in minutes (1440 = 24 hours)
-
-# Additional Filters
-YAP_FILTER_LINKS = os.getenv('YAP_FILTER_LINKS', 'false').lower() == 'true'  # Only tweets with links
-YAP_FILTER_MEDIA = os.getenv('YAP_FILTER_MEDIA', 'false').lower() == 'true'  # Only tweets with media
-YAP_FILTER_IMAGES = os.getenv('YAP_FILTER_IMAGES', 'false').lower() == 'true'  # Only tweets with images
-YAP_FILTER_VIDEOS = os.getenv('YAP_FILTER_VIDEOS', 'false').lower() == 'true'  # Only tweets with videos
-
-# Search Source
-YAP_SEARCH_SOURCE = os.getenv('YAP_SEARCH_SOURCE', 'recent_search_click')  # Search source parameter
+# Configure logging
+logging.basicConfig(
+    level=getattr(logging, LOG_LEVEL),
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(LOG_FILE),
+        logging.StreamHandler()
+    ]
+)
 
 # Validate required settings
 def validate_config():
