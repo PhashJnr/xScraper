@@ -44,46 +44,44 @@ class TwitterScraperMonitor:
         self.user_links_file = 'users_tweetlinks.txt'
         
     def _kill_existing_chrome(self):
-        """Kill only Chrome processes using the user profile directory"""
+        """Kill any Chrome processes that might interfere"""
         try:
-            import platform
-            is_windows = platform.system().lower() == 'windows'
-            
-            # Only kill Chrome processes that are using our specific profile
+            # Since we're using unique profiles, we can be less aggressive
+            # Just kill any Chrome processes that might be hanging
             chrome_processes = []
-            for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            for proc in psutil.process_iter(['pid', 'name']):
                 try:
                     proc_name = proc.info['name']
                     if proc_name and 'chrome' in proc_name.lower():
-                        cmdline = proc.info.get('cmdline', [])
-                        # Only kill processes using our specific user profile
-                        if any(CHROME_PROFILE_USER in arg for arg in cmdline):
-                            chrome_processes.append(proc)
+                        chrome_processes.append(proc)
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     continue
             
             if chrome_processes:
-                logger.info(f"Found {len(chrome_processes)} Chrome processes using user profile, killing them...")
+                logger.info(f"Found {len(chrome_processes)} Chrome processes, killing them...")
                 for proc in chrome_processes:
                     try:
-                        logger.info(f"Killing Chrome process using user profile: {proc.pid}")
+                        logger.info(f"Killing Chrome process: {proc.pid}")
                         proc.terminate()
-                        proc.wait(timeout=5)
+                        proc.wait(timeout=3)
                     except psutil.TimeoutExpired:
                         proc.kill()
                     except (psutil.NoSuchProcess, psutil.AccessDenied):
                         pass
             else:
-                logger.info("No Chrome processes found using user profile")
+                logger.info("No Chrome processes found")
                     
         except Exception as e:
             logger.warning(f"Error killing existing Chrome processes: {e}")
     
     def setup_driver(self):
-        """Setup Chrome driver with individual user profile directory"""
+        """Setup Chrome driver with unique user profile directory"""
         try:
-            # Use individual user profile directory
-            profile_dir = CHROME_PROFILE_USER
+            import uuid
+            
+            # Create unique profile directory for this instance
+            unique_profile = f"chrome_profile_user_{uuid.uuid4().hex[:8]}"
+            profile_dir = unique_profile
             
             # Ensure the directory exists
             os.makedirs(profile_dir, exist_ok=True)
@@ -113,7 +111,7 @@ class TwitterScraperMonitor:
             self.driver = webdriver.Chrome(options=chrome_options)
             self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
             
-            logger.info("Chrome driver initialized successfully with user profile")
+            logger.info(f"Chrome driver initialized successfully with unique profile: {profile_dir}")
             
         except Exception as e:
             logger.error(f"Failed to setup Chrome driver: {e}")
