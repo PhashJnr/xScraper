@@ -34,6 +34,15 @@ def create_profile_directory(profile_path, profile_name):
         
         # Setup Chrome options for this profile
         chrome_options = Options()
+        
+        # Set Chrome binary path if available
+        try:
+            from config import CHROME_BINARY_PATH
+            chrome_options.binary_location = CHROME_BINARY_PATH
+        except ImportError:
+            # Fallback to default Chrome path
+            chrome_options.binary_location = '/usr/bin/google-chrome'
+        
         chrome_options.add_argument(f'--user-data-dir={profile_path}')
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
