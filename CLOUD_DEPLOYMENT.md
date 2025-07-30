@@ -41,7 +41,7 @@ cd xUserTweetMonitor
 pip3 install -r requirements.txt
 
 # Create environment file
-cp env_example.txt .env
+
 nano .env  # Edit with your settings
 ```
 

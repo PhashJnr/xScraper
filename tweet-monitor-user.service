@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/root/xUserTweetMonitor
+WorkingDirectory=/root/xScraper
 ExecStart=/usr/bin/python3 main_scraper_locked_pc.py
 Restart=always
 RestartSec=10
