@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+# Base directory for the project
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Twitter API Configuration (for reference, not used in scraping mode)
 TWITTER_BEARER_TOKEN = os.getenv('TWITTER_BEARER_TOKEN', '')
 
@@ -39,6 +42,10 @@ LOG_FILE = os.getenv('LOG_FILE', 'tweet_monitor.log')
 
 # YAP Search Query Configuration
 # These parameters control the YAP search query for finding relevant tweets
+
+# Individual Chrome profiles
+CHROME_PROFILE_USER = os.path.join(BASE_DIR, "chrome_profile_user")
+CHROME_PROFILE_YAP = os.path.join(BASE_DIR, "chrome_profile_yap")
 
 # Search Keywords (REQUIRED)
 YAP_SEARCH_KEYWORDS = os.getenv('YAP_SEARCH_KEYWORDS', '("cysic" OR @cysic_xyz)')

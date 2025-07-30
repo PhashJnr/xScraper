@@ -22,7 +22,7 @@ from selenium.common.exceptions import (
     WebDriverException,
     StaleElementReferenceException
 )
-from config import USERS_TO_MONITOR, LOG_FILE, MAX_TWEETS_TO_SCRAPE
+from config import USERS_TO_MONITOR, LOG_FILE, MAX_TWEETS_TO_SCRAPE, CHROME_PROFILE_USER
 import psutil
 import subprocess
 from robust_notifier import RobustTelegramNotifier
@@ -71,10 +71,10 @@ class TwitterScraperMonitor:
             logger.warning(f"Error killing existing Chrome processes: {e}")
     
     def setup_driver(self):
-        """Setup Chrome driver with single main profile directory"""
+        """Setup Chrome driver with individual user profile directory"""
         try:
-            # Use single main profile directory
-            profile_dir = os.path.join(self.project_dir, 'chrome_profile')
+            # Use individual user profile directory
+            profile_dir = CHROME_PROFILE_USER
             
             # Ensure the directory exists
             os.makedirs(profile_dir, exist_ok=True)
@@ -103,7 +103,7 @@ class TwitterScraperMonitor:
             self.driver = webdriver.Chrome(options=chrome_options)
             self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
             
-            logger.info("Chrome driver initialized successfully")
+            logger.info("Chrome driver initialized successfully with user profile")
             
         except Exception as e:
             logger.error(f"Failed to setup Chrome driver: {e}")

@@ -38,7 +38,8 @@ from config import (
     YAP_FILTER_MEDIA,
     YAP_FILTER_IMAGES,
     YAP_FILTER_VIDEOS,
-    YAP_SEARCH_SOURCE
+    YAP_SEARCH_SOURCE,
+    CHROME_PROFILE_YAP
 )
 import psutil
 import subprocess
@@ -86,10 +87,10 @@ class YapSearchScraper:
             logger.warning(f"Error killing existing Chrome processes: {e}")
     
     def setup_driver(self):
-        """Setup Chrome driver with single main profile directory"""
+        """Setup Chrome driver with individual YAP profile directory"""
         try:
-            # Use single main profile directory
-            profile_dir = os.path.join(self.project_dir, 'chrome_profile')
+            # Use individual YAP profile directory
+            profile_dir = CHROME_PROFILE_YAP
             
             # Ensure the directory exists
             os.makedirs(profile_dir, exist_ok=True)
@@ -118,7 +119,7 @@ class YapSearchScraper:
             self.driver = webdriver.Chrome(options=chrome_options)
             self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
             
-            logger.info("Chrome driver initialized successfully")
+            logger.info("Chrome driver initialized successfully with YAP profile")
             
         except Exception as e:
             logger.error(f"Failed to setup Chrome driver: {e}")
