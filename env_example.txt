@@ -1,0 +1,104 @@
+# Twitter Monitor Configuration
+# Copy this file to .env and fill in your values
+
+# Twitter Login Credentials (for cloud VPS deployment)
+TWITTER_USERNAME=your_twitter_username_or_email
+TWITTER_PASSWORD=your_twitter_password
+
+# Telegram Configuration
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+TELEGRAM_CHAT_ID=your_chat_id_here
+
+# Monitoring Intervals (in minutes)
+CHECK_INTERVAL_MINUTES=15                    # User monitoring interval (15 minutes)
+YAP_CHECK_INTERVAL_MINUTES=1080             # YAP links interval (18 hours = 1080 minutes)
+
+# Maximum tweets to scrape
+MAX_TWEETS_TO_SCRAPE=50
+
+# Users to Monitor (comma-separated usernames without @)
+USERS_TO_MONITOR=username1,username2,username3
+
+# Logging Settings
+LOG_LEVEL=INFO
+LOG_FILE=tweet_monitor.log
+
+# YAP Search Query Configuration
+# =============================
+# These parameters control the YAP search query for finding relevant tweets
+
+# Search Keywords (REQUIRED)
+# Format: ("keyword1" OR @username1 OR "keyword2" OR @username2)
+# Examples:
+# - YAP_SEARCH_KEYWORDS=("cysic" OR @cysic_xyz)
+# - YAP_SEARCH_KEYWORDS=("bitcoin" OR "crypto" OR @bitcoin)
+# - YAP_SEARCH_KEYWORDS=("AI" OR "artificial intelligence" OR @openai)
+YAP_SEARCH_KEYWORDS=("cysic" OR @cysic_xyz)
+
+# Account Verification Filter
+# true = Only show tweets from verified (blue checkmark) accounts
+# false = Show tweets from all accounts
+YAP_FILTER_VERIFIED=true
+
+# Content Type Filters (Exclude certain types of tweets)
+# true = Exclude this type, false = Include this type
+YAP_FILTER_NATIVE_RETWEETS=true    # Exclude native retweets (RT)
+YAP_FILTER_RETWEETS=true           # Exclude all retweets
+YAP_FILTER_REPLIES=true            # Exclude replies to other tweets
+
+# Engagement Filters (Minimum requirements)
+# Set to 0 to disable the filter
+YAP_MIN_REPLIES=20                 # Minimum replies required (0-1000)
+YAP_MIN_LIKES=0                    # Minimum likes required (0-10000)
+YAP_MIN_RETWEETS=0                 # Minimum retweets required (0-1000)
+
+# Language and Time Filters
+YAP_LANGUAGE=en                    # Language filter (en, es, fr, de, etc.)
+YAP_TIME_WINDOW=1440               # Time window in minutes (1440 = 24 hours)
+
+# Additional Content Filters
+# true = Only show tweets with this content type
+# false = Show all tweets regardless of content type
+YAP_FILTER_LINKS=false             # Only tweets with links
+YAP_FILTER_MEDIA=false             # Only tweets with media (images/videos)
+YAP_FILTER_IMAGES=false            # Only tweets with images
+YAP_FILTER_VIDEOS=false            # Only tweets with videos
+
+# Search Source (Usually leave as default)
+YAP_SEARCH_SOURCE=recent_search_click
+
+# Twitter API (Optional - for reference only, not used in scraping mode)
+TWITTER_BEARER_TOKEN=your_twitter_bearer_token_here
+
+# Configuration Notes:
+# ===================
+# - CHECK_INTERVAL_MINUTES: How often to check for new tweets (default: 5)
+# - MAX_TWEETS_PER_CHECK: Maximum tweets to process per check (default: 10)
+# - MAX_TWEETS_TO_SCRAPE: Maximum tweets to scrape from each user/page (default: 50)
+# - USERS_TO_MONITOR: Comma-separated list of Twitter usernames (without @)
+# - LOG_LEVEL: DEBUG, INFO, WARNING, ERROR (default: INFO)
+# - LOG_FILE: Name of the log file (default: tweet_monitor.log)
+
+# YAP Search Query Examples:
+# =========================
+# 1. High-engagement crypto tweets:
+#    YAP_SEARCH_KEYWORDS=("bitcoin" OR "crypto" OR "blockchain")
+#    YAP_MIN_REPLIES=50
+#    YAP_MIN_LIKES=100
+#    YAP_FILTER_VERIFIED=true
+
+# 2. Recent AI discussions:
+#    YAP_SEARCH_KEYWORDS=("AI" OR "artificial intelligence" OR "machine learning")
+#    YAP_TIME_WINDOW=720  # 12 hours
+#    YAP_MIN_REPLIES=10
+
+# 3. Breaking news:
+#    YAP_SEARCH_KEYWORDS=("breaking" OR "news" OR "update")
+#    YAP_TIME_WINDOW=60   # 1 hour
+#    YAP_FILTER_VERIFIED=true
+#    YAP_FILTER_LINKS=true
+
+# 4. Viral content:
+#    YAP_SEARCH_KEYWORDS=("viral" OR "trending" OR "popular")
+#    YAP_MIN_LIKES=1000
+#    YAP_MIN_RETWEETS=100 

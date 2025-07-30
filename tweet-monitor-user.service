@@ -1,0 +1,15 @@
+[Unit]
+Description=X User Tweet Monitor (User Monitoring)
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/xUserTweetMonitor
+ExecStart=/usr/bin/python3 main_scraper_locked_pc.py
+Restart=always
+RestartSec=10
+Environment=DISPLAY=:99
+
+[Install]
+WantedBy=multi-user.target 

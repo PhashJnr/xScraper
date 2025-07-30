@@ -1,0 +1,252 @@
+# ===========================================
+# PERSONAL DATA PROTECTION
+# ===========================================
+
+# Environment variables (contains API keys, tokens, credentials)
+.env
+.env.local
+.env.production
+.env.staging
+
+# Twitter credentials and login data
+chrome_profile/
+chrome_profile_*/
+*.crdownload
+*.tmp
+
+# Telegram credentials
+telegram_config.json
+bot_credentials.json
+
+# ===========================================
+# APPLICATION DATA
+# ===========================================
+
+# Logs (may contain sensitive information)
+*.log
+logs/
+monitor.log
+debug.log
+error.log
+
+# Data files (contains tweet IDs, user data)
+seen_tweets.json
+seen_tweets_scraper.json
+seen_tweets_rss.json
+seen_tweets_*.json
+
+# Output files (contains scraped URLs)
+yap_links.txt
+users_tweetlinks.txt
+*.txt
+!requirements.txt
+!env_example.txt
+!README.md
+!CLOUD_DEPLOYMENT.md
+!MULTI_SERVICE_DEPLOYMENT.md
+
+# Cache and temporary files
+cache/
+temp/
+tmp/
+*.cache
+*.tmp
+
+# ===========================================
+# PYTHON
+# ===========================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ===========================================
+# DEVELOPMENT TOOLS
+# ===========================================
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# ===========================================
+# OPERATING SYSTEM
+# ===========================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ===========================================
+# CLOUD DEPLOYMENT
+# ===========================================
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Kubernetes
+*.kubeconfig
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# ===========================================
+# SECURITY
+# ===========================================
+
+# SSH keys
+id_rsa
+id_rsa.pub
+*.pem
+*.key
+
+# Certificates
+*.crt
+*.cer
+*.der
+*.p12
+*.pfx
+
+# ===========================================
+# TESTING AND DEBUGGING
+# ===========================================
+
+# Test files (keep only essential ones)
+test_*.py
+!test_simplified_yap.py
+!test_url_extraction.py
+!test_telegram_file.py
+!test_separate_intervals.py
+
+# Debug files
+debug_*.py
+*.debug
+debug.log
+
+# ===========================================
+# BACKUP AND ARCHIVE
+# ===========================================
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Archive files
+*.tar
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# ===========================================
+# MONITORING AND METRICS
+# ===========================================
+
+# Performance data
+*.perf
+*.profile
+*.trace
+
+# System monitoring
+system_metrics.json
+performance_logs/ 
