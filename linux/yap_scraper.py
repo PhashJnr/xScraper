@@ -39,7 +39,8 @@ from config import (
     YAP_FILTER_IMAGES,
     YAP_FILTER_VIDEOS,
     YAP_SEARCH_SOURCE,
-    CHROME_PROFILE_YAP
+    CHROME_PROFILE_YAP,
+    CHROME_BINARY_PATH
 )
 import psutil
 import subprocess
@@ -105,6 +106,7 @@ class YapSearchScraper:
             os.makedirs(profile_dir, exist_ok=True)
             
             chrome_options = webdriver.ChromeOptions()
+            chrome_options.binary_location = CHROME_BINARY_PATH
             chrome_options.add_argument(f'--user-data-dir={profile_dir}')
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-dev-shm-usage')

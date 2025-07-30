@@ -22,7 +22,7 @@ from selenium.common.exceptions import (
     WebDriverException,
     StaleElementReferenceException
 )
-from config import USERS_TO_MONITOR, LOG_FILE, MAX_TWEETS_TO_SCRAPE, CHROME_PROFILE_USER
+from config import USERS_TO_MONITOR, LOG_FILE, MAX_TWEETS_TO_SCRAPE, CHROME_PROFILE_USER, CHROME_BINARY_PATH
 import psutil
 import subprocess
 from robust_notifier import RobustTelegramNotifier
@@ -89,6 +89,7 @@ class TwitterScraperMonitor:
             os.makedirs(profile_dir, exist_ok=True)
             
             chrome_options = webdriver.ChromeOptions()
+            chrome_options.binary_location = CHROME_BINARY_PATH
             chrome_options.add_argument(f'--user-data-dir={profile_dir}')
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-dev-shm-usage')
